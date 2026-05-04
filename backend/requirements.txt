@@ -1,5 +1,3 @@
-transformers
-torch
 fastapi
 uvicorn
 python-multipart
@@ -12,7 +10,4 @@ numpy
 matplotlib
 scikit-learn
 seaborn
-<<<<<<< HEAD
 requests
-=======
->>>>>>> 1c2cb2d325c9d8571b5f7b9e9bbab26bbc9a7318

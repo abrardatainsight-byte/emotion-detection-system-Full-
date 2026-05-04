@@ -47,14 +47,20 @@ app.add_middleware(
 )
 
 # ---------------------------------------------------------------------------
-# Load ViT model once at startup
+# Lazy-load ViT model (on first use, not at startup)
 # ---------------------------------------------------------------------------
-print("Loading Vision Transformer model …")
-emotion_classifier = pipeline(
-    "image-classification",
-    model="dima806/facial_emotions_image_detection",
-)
-print("Model loaded.")
+emotion_classifier = None
+
+def get_emotion_classifier():
+    global emotion_classifier
+    if emotion_classifier is None:
+        print("Loading Vision Transformer model (on first inference) …")
+        emotion_classifier = pipeline(
+            "image-classification",
+            model="dima806/facial_emotions_image_detection",
+        )
+        print("Model loaded.")
+    return emotion_classifier
 
 # ---------------------------------------------------------------------------
 # Emotion label normalisation
@@ -180,7 +186,8 @@ def analyze_emotion(
     try:
         image_bytes = file.file.read()
         image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-        predictions = emotion_classifier(image)
+        classifier = get_emotion_classifier()
+        predictions = classifier(image)
         top = predictions[0]
         label = normalise_label(top["label"])
         score = float(top["score"])

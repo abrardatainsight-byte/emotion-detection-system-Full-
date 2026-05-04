@@ -7,6 +7,7 @@ import os
 import io
 import datetime
 import base64
+import sys
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Form, Query
